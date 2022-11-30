@@ -4,7 +4,7 @@ import { Products } from 'src/products/schema/products.schema';
 
 export type SubcategoriesDocument = HydratedDocument<Subcategories>;
 
-@Schema()
+@Schema({ versionKey: false })
 export class Subcategories {
   @Prop()
   subCategoryName: string;

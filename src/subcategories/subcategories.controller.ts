@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Post,
-  UsePipes,
+  UsePipes, 
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateSubcategoriesDto } from './dto/subcategories.dto';

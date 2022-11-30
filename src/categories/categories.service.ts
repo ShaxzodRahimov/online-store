@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Subcategories } from 'src/subcategories/schema/subcategories.schema';
 import { CreateCategoriesDto } from './dto/categories.dto';
 import { Categories, CategoriesDocument } from './schema/categories.schema';
 
@@ -24,7 +25,12 @@ export class CategoriesService {
   }
 
   async getAllCategories(): Promise<Categories[]> {
-    return this.categoriesModel.find({}).populate('subCategories');
+    return this.categoriesModel.find({}).populate({path: 'subCategories', select: '-products'});
+    // .populate({
+    //   path: 'subcategories',
+    //   select: 'products',
+    //   strictPopulate: false,
+    // });
   }
 
   async getCategoryByID(id: string): Promise<Categories> {

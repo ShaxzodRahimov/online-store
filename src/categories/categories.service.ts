@@ -1,8 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Subcategories } from 'src/subcategories/schema/subcategories.schema';
-import { CreateCategoriesDto } from './dto/categories.dto';
+import { CreateCategoriesDto, updateCategoriesDto } from './dto';
 import { Categories, CategoriesDocument } from './schema/categories.schema';
 
 @Injectable()
@@ -24,19 +23,6 @@ export class CategoriesService {
     return createdCategory.save();
   }
 
-  /*
-  Car
-  .find()
-  .populate({
-    path: 'partIds',
-    model: 'Part',
-    populate: {
-      path: 'otherIds',
-      model: 'Other'
-    }
-  })
-  */
-
   async getAllCategories(): Promise<Categories[]> {
     return this.categoriesModel.find({}).populate({
       path: 'subCategories',
@@ -46,9 +32,38 @@ export class CategoriesService {
   }
 
   async getCategoryByID(id: string): Promise<Categories> {
+    const category = await this.categoriesModel.findById(id).populate({
+      path: 'subCategories',
+      model: 'Subcategories',
+      populate: { path: 'products', model: 'Products' },
+    });
+
+    if (!category)
+      throw new HttpException('Category Not Foun', HttpStatus.NOT_FOUND);
+
+    return category;
+  }
+
+  async deleteCategory(id: string): Promise<Categories> {
+    const category = await this.categoriesModel.findByIdAndDelete(id);
+
+    if (!category)
+      throw new HttpException('Category Not Foun', HttpStatus.NOT_FOUND);
+
+    return category;
+  }
+
+  async updateCategory(
+    id: string,
+    categoryDto: updateCategoriesDto,
+  ): Promise<Categories> {
     const category = await this.categoriesModel
-      .findById(id)
-      .populate('subCategories');
+      .findByIdAndUpdate(id, categoryDto, { new: true })
+      .populate({
+        path: 'subCategories',
+        model: 'Subcategories',
+        populate: { path: 'products', model: 'Products' },
+      });
 
     if (!category)
       throw new HttpException('Category Not Foun', HttpStatus.NOT_FOUND);

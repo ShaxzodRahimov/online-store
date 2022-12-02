@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UpdateProductsDto } from './dto';
 import { CreateProductsDto } from './dto/create-product.dto';
 import { Products, ProductsDocument } from './schema/products.schema';
 
@@ -23,8 +24,8 @@ export class ProductsService {
   }
 
   async getAllProducts() {
-    return [];
-    // return this.productsModel.find({}).populate('subCategoryId');
+    // return [];
+    return this.productsModel.find({}).populate('subCategoryId');
   }
 
   async getProductByID(id: string) {
@@ -37,6 +38,26 @@ export class ProductsService {
 
   async getProductByQuery(data: object) {
     const product = await this.productsModel.findOne(data);
+
+    if (!product)
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+
+    return product;
+  }
+
+  async updateProduct(id: string, productDto: UpdateProductsDto) {
+    const product = await this.productsModel.findByIdAndUpdate(id, productDto, {
+      new: true,
+    });
+
+    if (!product)
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+
+    return product;
+  }
+
+  async deleteProduct(id: string) {
+    const product = await this.productsModel.findByIdAndDelete(id);
 
     if (!product)
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);

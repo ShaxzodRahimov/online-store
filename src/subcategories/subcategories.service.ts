@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateSubcategoriesDto } from './dto/subcategories.dto';
+import { UpdateSubcategoriesDto, CreateSubcategoriesDto } from './dto';
 import {
   Subcategories,
   SubcategoriesDocument,
@@ -31,5 +31,39 @@ export class SubcategoriesService {
 
   async getAllSubcategories() {
     return this.subcategoriesModel.find({}).populate('products');
+  }
+
+  async getSubcategorieByID(id: string): Promise<Subcategories> {
+    const subcategory = await this.subcategoriesModel
+      .findById(id)
+      .populate('products');
+
+    if (!subcategory)
+      throw new HttpException('Subcategory not found', HttpStatus.NOT_FOUND);
+
+    return subcategory;
+  }
+
+  async updateSubcategorie(
+    id: string,
+    subcategoryDto: UpdateSubcategoriesDto,
+  ): Promise<Subcategories> {
+    const subcategory = await this.subcategoriesModel
+      .findByIdAndUpdate(id, subcategoryDto, { new: true })
+      .populate('products');
+
+    if (!subcategory)
+      throw new HttpException('Subcategory not found', HttpStatus.NOT_FOUND);
+
+    return subcategory;
+  }
+
+  async deleteSubcategorie(id: string): Promise<Subcategories> {
+    const subcategory = await this.subcategoriesModel.findByIdAndDelete(id);
+
+    if (!subcategory)
+      throw new HttpException('Subcategory not found', HttpStatus.NOT_FOUND);
+
+    return subcategory;
   }
 }

@@ -1,8 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
-  UsePipes, 
+  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateSubcategoriesDto } from './dto/subcategories.dto';
@@ -16,5 +17,10 @@ export class SubcategoriesController {
   @UsePipes(ValidationPipe)
   async createSubcategory(@Body() subcategory: CreateSubcategoriesDto) {
     return this.subcategoriesService.createSubcategory(subcategory);
+  }
+
+  @Get()
+  async getAllSubcategories() {
+    return this.subcategoriesService.getAllSubcategories();
   }
 }

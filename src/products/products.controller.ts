@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -17,6 +19,16 @@ export class ProductsController {
   @UsePipes(ValidationPipe)
   async createProduct(@Body() product: CreateProductsDto) {
     return this.productsService.createProduct(product);
+  }
+
+  @Get('query')
+  async getProductByQuery(@Query() data: object) {
+    return this.productsService.getProductByQuery(data);
+  }
+
+  @Get(':id')
+  async getProductByID(@Param('id') id: string) {
+    return this.productsService.getProductByID(id);
   }
 
   @Get()

@@ -23,7 +23,24 @@ export class ProductsService {
   }
 
   async getAllProducts() {
-    // return []
-    return this.productsModel.find({});
+    return [];
+    // return this.productsModel.find({}).populate('subCategoryId');
+  }
+
+  async getProductByID(id: string) {
+    const product = await this.productsModel.findById(id);
+    if (!product)
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+
+    return product;
+  }
+
+  async getProductByQuery(data: object) {
+    const product = await this.productsModel.findOne(data);
+
+    if (!product)
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+
+    return product;
   }
 }

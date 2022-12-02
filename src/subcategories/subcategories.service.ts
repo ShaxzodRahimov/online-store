@@ -28,4 +28,8 @@ export class SubcategoriesService {
 
     return createdSubcategory.save();
   }
+
+  async getAllSubcategories() {
+    return this.subcategoriesModel.find({}).populate('products');
+  }
 }

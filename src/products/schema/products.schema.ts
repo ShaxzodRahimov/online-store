@@ -1,10 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { Subcategories } from 'src/subcategories/schema/subcategories.schema';
 
 export type ProductsDocument = HydratedDocument<Products>;
 
 @Schema({ versionKey: false })
 export class Products {
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Subcategories' })
+  subCategoryId: Subcategories;
+
   @Prop()
   model: string;
 

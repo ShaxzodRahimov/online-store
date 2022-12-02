@@ -24,13 +24,25 @@ export class CategoriesService {
     return createdCategory.save();
   }
 
+  /*
+  Car
+  .find()
+  .populate({
+    path: 'partIds',
+    model: 'Part',
+    populate: {
+      path: 'otherIds',
+      model: 'Other'
+    }
+  })
+  */
+
   async getAllCategories(): Promise<Categories[]> {
-    return this.categoriesModel.find({}).populate({path: 'subCategories', select: '-products'});
-    // .populate({
-    //   path: 'subcategories',
-    //   select: 'products',
-    //   strictPopulate: false,
-    // });
+    return this.categoriesModel.find({}).populate({
+      path: 'subCategories',
+      model: 'Subcategories',
+      populate: { path: 'products', model: 'Products' },
+    });
   }
 
   async getCategoryByID(id: string): Promise<Categories> {

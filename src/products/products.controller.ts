@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -10,13 +12,17 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { CategoriesService } from 'src/categories/categories.service';
 import { UpdateProductsDto } from './dto';
 import { CreateProductsDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly categoryService: CategoriesService,
+  ) {}
 
   @Post()
   @UsePipes(ValidationPipe)
@@ -25,8 +31,16 @@ export class ProductsController {
   }
 
   @Get('query')
-  async getProductByQuery(@Query() data: object) {
-    return this.productsService.getProductByQuery(data);
+  async getProductByQuery(@Query('') data: object) {
+    if (data['categoryId'])
+      return this.categoryService.getCategoryByID(data['categoryId']);
+    else if (data['subCategoryId' || 'model'])
+      return this.productsService.getProductByQuery(data);
+    else
+      throw new HttpException(
+        'Normalni narsa kiritsen bumedimi',
+        HttpStatus.BAD_REQUEST,
+      );
   }
 
   @Get(':id')
@@ -36,7 +50,7 @@ export class ProductsController {
 
   @Get()
   async getAllProducts() {
-    return []
+    return [];
     // return this.productsService.getAllProducts();
   }
 

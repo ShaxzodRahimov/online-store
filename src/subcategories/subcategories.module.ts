@@ -15,6 +15,6 @@ import { SubcategoriesService } from './subcategories.service';
   ],
   controllers: [SubcategoriesController],
   providers: [SubcategoriesService],
-  // exports: [SubcategoriesService],
+  exports: [SubcategoriesService],
 })
 export class SubcategoriesModule {}

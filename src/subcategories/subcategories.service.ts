@@ -30,13 +30,15 @@ export class SubcategoriesService {
   }
 
   async getAllSubcategories() {
-    return this.subcategoriesModel.find({}).populate('products');
+    return this.subcategoriesModel
+      .find({})
+      .populate('products', '-subCategoryId');
   }
 
   async getSubcategorieByID(id: string): Promise<Subcategories> {
     const subcategory = await this.subcategoriesModel
       .findById(id)
-      .populate('products');
+      .populate('products', '-subCategoryId');
 
     if (!subcategory)
       throw new HttpException('Subcategory not found', HttpStatus.NOT_FOUND);
@@ -50,7 +52,7 @@ export class SubcategoriesService {
   ): Promise<Subcategories> {
     const subcategory = await this.subcategoriesModel
       .findByIdAndUpdate(id, subcategoryDto, { new: true })
-      .populate('products');
+      .populate('products', '-subCategoryId');
 
     if (!subcategory)
       throw new HttpException('Subcategory not found', HttpStatus.NOT_FOUND);

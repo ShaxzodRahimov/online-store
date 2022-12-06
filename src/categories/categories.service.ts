@@ -27,7 +27,11 @@ export class CategoriesService {
     return this.categoriesModel.find({}).populate({
       path: 'subCategories',
       model: 'Subcategories',
-      populate: { path: 'products', model: 'Products' },
+      populate: {
+        path: 'products',
+        model: 'Products',
+        select: '-subCategoryId',
+      },
     });
   }
 

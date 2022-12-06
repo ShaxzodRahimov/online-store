@@ -12,7 +12,7 @@ import { Products, ProductsDocument } from './schema/products.schema';
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(Products.name) private productsModel: Model<ProductsDocument>,
+    @InjectModel(Products.name) private productsModel: Model<ProductsDocument>, 
     @InjectModel(Subcategories.name)
     private subCategoriesModel: Model<SubcategoriesDocument>,
   ) {}

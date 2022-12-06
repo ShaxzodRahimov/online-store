@@ -36,7 +36,8 @@ export class ProductsController {
 
   @Get()
   async getAllProducts() {
-    return this.productsService.getAllProducts();
+    return []
+    // return this.productsService.getAllProducts();
   }
 
   @Put(':id')

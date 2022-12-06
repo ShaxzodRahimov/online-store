@@ -23,10 +23,10 @@ export class ProductsService {
     return createdProduct.save();
   }
 
-  async getAllProducts() {
-    // return [];
-    return this.productsModel.find({}).populate('subCategoryId');
-  }
+  // async getAllProducts() {
+  //   // return [];
+  //   return this.productsModel.find({}).populate('subCategoryId');
+  // }
 
   async getProductByID(id: string) {
     const product = await this.productsModel.findById(id);
